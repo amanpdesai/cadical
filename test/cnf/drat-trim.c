@@ -1882,7 +1882,7 @@ int parse (struct solver *S) {
             hashTable[hash], sizeof (long *) * hashMax[hash]);
         if (hashTable[hash] == NULL) {
           printf ("c MEMOUT reallocation of hash table %i failed\n", hash);
-          exit (0);
+          exit (EXIT_FAILURE);
         }
       }
       hashTable[hash][hashUsed[hash]++] = (long) (clause - S->DB);
