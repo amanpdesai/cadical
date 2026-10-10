@@ -1683,8 +1683,8 @@ int parse (struct solver *S) {
   int i;
   for (i = 0; i < BIGINIT; i++) {
     hashUsed[i] = 0;
-    hashMax[i] = INIT;
-    hashTable[i] = (long *) malloc (sizeof (long) * hashMax[i]);
+    hashMax[i] = 0;
+    hashTable[i] = NULL;
   }
 
   int fileSwitchFlag = 0;
@@ -1877,7 +1877,8 @@ int parse (struct solver *S) {
 
       hash = getHash (clause);
       if (hashUsed[hash] == hashMax[hash]) {
-        hashMax[hash] = (hashMax[hash] * 3) >> 1;
+        // Empty buckets need no storage until their first clause is added.
+        hashMax[hash] = hashMax[hash] ? (hashMax[hash] * 3) >> 1 : INIT;
         hashTable[hash] = (long *) realloc (
             hashTable[hash], sizeof (long *) * hashMax[hash]);
         if (hashTable[hash] == NULL) {
